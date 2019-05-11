@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.ems.ytz.dao">
+    <!-- 增加 -->
+    <insert id="insertAdmin">
+        insert into t_admin(admin_account,password,name,sex) values(#{username},#{password},#{name},#{sex})
+    </insert>
+    <resultMap type="Admin" id="RM_ADMIN">
+        <id column="id" property="id"/>
+        <result column="admin_account" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+    </resultMap>
+    <sql id="QUERY">
+        select id,admin_account,password,name,sex from t_admin
+    </sql>
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultMap="RM_ADMIN">
+        <include refid="QUERY"/>
+        where id = #{aid}
+    </select>
+    <!-- 用户名和密码查询 -->
+    <select id="selectByUnAndPwd" resultMap="RM_ADMIN">
+        <include refid="QUERY"/>
+        where admin_account = #{username} and password = #{password}
+    </select>
+    <!-- 根据用户名查询 -->
+    <select id="selectByUserName" parameterType="String" resultMap="RM_ADMIN">
+        <include refid="QUERY"/>
+        where admin_account = #{userName}
+    </select>
+</mapper>

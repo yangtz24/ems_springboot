@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.ems.ytz.dao">
+    <!-- 添加 -->
+    <insert id="insertEmp">
+        insert into t_employee(name,age,sex,salary,birthday) values(#{name},#{age},#{sex},#{salary},#{birthday,jdbcType=DATE})
+    </insert>
+    <!-- 修改 -->
+    <update id="updateEmp" parameterType="Employee">
+        update t_employee set
+        name = #{name},
+        age = #{age},
+        salary = #{salary}
+        where id = #{id}
+    </update>
+    <!-- 删除 -->
+    <delete id="deleteEmp">
+        delete from t_employee where id = #{eid}
+    </delete>
+    <!-- 批量删除 -->
+    <delete id="batchDeleteEmp">
+        delete from t_employee where id in
+        <foreach collection="array" open="(" item="ids" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+    <resultMap type="Employee" id="RM_EMP">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="salary" property="salary"/>
+        <result column="birthday" property="birthday"/>
+    </resultMap>
+    <sql id="QueryEmp">
+        select id,name,age,sex,salary,birthday from t_employee
+    </sql>
+    <!-- 根据ID查找 -->
+    <select id="selectById" parameterType="int" resultMap="RM_EMP">
+       <include refid="QueryEmp"/> where id = #{eid}
+    </select>
+    <!-- 查询所有 -->
+    <select id="selectAll" resultMap="RM_EMP">
+        <include refid="QueryEmp"/>
+    </select>
+</mapper>
